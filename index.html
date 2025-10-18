@@ -148,7 +148,7 @@
   <script>
     // === EDIT THIS DATE ===
     // Use your planned release date/time (local time). Format: YYYY-MM-DDTHH:MM:SS
-    const TARGET_DATE = "2025-09-27T18:00:00";
+    const TARGET_DATE = "2025-10-19T18:00:00";
 
     // ——————————————————————
     const target = new Date(TARGET_DATE);
@@ -162,21 +162,13 @@
     const statusEl = document.getElementById('status');
     const titleBase = document.title;
 
-    let lastKnownDiff = null;
-
     function pad(n){ return String(n).padStart(2,'0'); }
 
-    function isActiveTime() {
-      const now = new Date();
-      const hours = now.getHours();
-      return hours >= 6 && hours < 19; // 6 AM to 7 PM
-    }
-
-    function tick() {
+    function tick(){
       const now = new Date();
       const diff = target - now;
 
-      if (diff <= 0) {
+      if(diff <= 0){
         dEl.textContent = hEl.textContent = mEl.textContent = sEl.textContent = "00";
         statusEl.textContent = "✅ Update is live!";
         document.querySelector('h1').textContent = "Update released";
@@ -184,37 +176,17 @@
         return clearInterval(t);
       }
 
-      if (isActiveTime()) {
-        // Update countdown during active hours (6 AM to 7 PM)
-        const days = Math.floor(diff / (1000*60*60*24));
-        const hours = Math.floor((diff / (1000*60*60)) % 24);
-        const mins = Math.floor((diff / (1000*60)) % 60);
-        const secs = Math.floor((diff / 1000) % 60);
+      const days = Math.floor(diff / (1000*60*60*24));
+      const hours = Math.floor((diff / (1000*60*60)) % 24);
+      const mins = Math.floor((diff / (1000*60)) % 60);
+      const secs = Math.floor((diff / 1000) % 60);
 
-        dEl.textContent = pad(days);
-        hEl.textContent = pad(hours);
-        mEl.textContent = pad(mins);
-        sEl.textContent = pad(secs);
+      dEl.textContent = pad(days);
+      hEl.textContent = pad(hours);
+      mEl.textContent = pad(mins);
+      sEl.textContent = pad(secs);
 
-        lastKnownDiff = diff; // Store last known difference for pause state
-        statusEl.textContent = "Counting down…";
-        document.title = `${pad(days)}d ${pad(hours)}h ${pad(mins)}m — ${titleBase}`;
-      } else {
-        // Pause countdown outside active hours
-        if (lastKnownDiff !== null) {
-          const days = Math.floor(lastKnownDiff / (1000*60*60*24));
-          const hours = Math.floor((lastKnownDiff / (1000*60*60)) % 24);
-          const mins = Math.floor((lastKnownDiff / (1000*60)) % 60);
-          const secs = Math.floor((lastKnownDiff / 1000) % 60);
-
-          dEl.textContent = pad(days);
-          hEl.textContent = pad(hours);
-          mEl.textContent = pad(mins);
-          sEl.textContent = pad(secs);
-        }
-        statusEl.textContent = "⏸ Timer paused until 6 AM tomorrow";
-        document.title = `Paused — ${titleBase}`;
-      }
+      document.title = `${pad(days)}d ${pad(hours)}h ${pad(mins)}m — ${titleBase}`;
     }
 
     const t = setInterval(tick, 1000);
@@ -222,3 +194,4 @@
   </script>
 </body>
 </html>
+
